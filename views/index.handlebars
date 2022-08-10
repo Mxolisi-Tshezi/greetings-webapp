@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greetings Exercise</title>
+    <link rel="stylesheet" href="/css/greet-style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <h1>Greetings Exerise</h1>
+            <p class="error-message">{{error}}</p>
+            <div class="message">
+                <span class="name"> <h2>Enter name below</h2></span>
+
+                <form action="/greet" method="POST">
+                    <input type="text" name="name" class="inputName" placeholder="Name">
+                    <span class="counter">{{counter}}</span>
+            </div>
+            <h2>Select Language</h2>
+
+            <div class="language-container">
+                <div class=language>
+                    <h2>English</h2>
+                    <input type="radio" name="language" class="radio-input" value="english">
+                </div>
+
+                <div class=language>
+                    <h2>Isixhosa</h2>
+                    <input type="radio" name="language" class="radio-input" value="isixhosa">
+                </div>
+
+                <div class=language>
+                    <h2>isiZulu</h2>
+                    <input type="radio" name="language" class="radio-input" value="isiZulu">
+                </div>
+            </div>
+            <div class="showElement" id="msg">
+                {{GreetAll}}
+                {{#if messages.info}}
+                <div class="entry" id="msg">
+                    <h1> {{messages.info}}</h1>
+                </div>
+                {{/if}}
+            </div>
+            <div>
+                <button type="submit" class="button">Greet Me</button>
+                <br>
+                <br>
+                <a href="/clear"> <div class="clear">Reset Counter</div>
+                </a>
+            </div>
+            <div class="topnav">
+                {{!-- <a class="active" href="/">Home</a> --}}
+                {{!-- <a href="/greeted">View Greeted Names</a> --}}
+                {{!-- <a href="/counter">Times</a> --}}
+            </div>
+            <div style="padding-left:16px">
+            </div>
+            </form>
+            <br>
+
+            <a href="/greeted"><button type="submit" class="button1">View Greeted Names</button></a>
+        </div>
+        <script src="setTimeout.js"></script>
+    </div>
+</body>
+
+</html>

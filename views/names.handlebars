@@ -1,0 +1,19 @@
+<div class="center" style="background-color: gray;">
+
+    <h3 style="text-align: center;">Names List</h3>
+    <div style="text-align: center;"> 
+        
+        
+        {{#each keynames}}
+        <a href="/counter/{{@key}}">
+            <p>{{@key}}</p>
+        </a>
+        {{/each}}
+    </div>
+</div>
+
+ <div class="topnav">
+  <a class="active" href="/">Back</a>
+  {{!-- <a href="/greeted">View Greeted Names</a> --}}
+  {{!-- <a href="/counter">Times</a> --}}
+</div>
