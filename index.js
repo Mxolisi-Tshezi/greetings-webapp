@@ -79,7 +79,7 @@ app.get("/counter/:name", function (req, res) {
   for (const name in person) {
     if (name == words) {
       let greetedTimes = person[name]
-      Text = `Hi , ${words} You have been greeted ${greetedTimes} times`
+      Text = `Hi , ${words} You have been greeted ${greetedTimes} time(s)`
     }
   }
   console.log(Text)

@@ -17,7 +17,6 @@ module.exports = function Greet() {
     return language
   }
 
-
   function getLanguage(name,language) {
         
     if (greeted[name] === undefined) {
