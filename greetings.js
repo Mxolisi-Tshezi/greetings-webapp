@@ -1,92 +1,59 @@
-module.exports = function Greet() {
-  let name = ''
-  let language = ''
-  let greeted = {}
+module.exports = function Greet(db) {
+  
+  let alphabets = /^[a-z A-Z]+$/;
 
-  function setLanguage(lang) {
-    language = lang
-  }
-  function setName(username) {
-    name = username
-  }
+  async function greet2(names) {
 
-  function getName() {
-    return name
-  }
-  function getLanguage() {
-    return language
-  }
+    let name = names.charAt(0).toUpperCase() + names.slice(1).toLowerCase();
 
-  function getLanguage(name,language) {
-        
-    if (greeted[name] === undefined) {
-      greeted[name] = 1;
+    let show = await db.oneOrNone('select greeted_names from my_greet where greeted_names = $1', [name])
+
+    if (show === null && alphabets.test(names) == true) {
+      await db.none('insert into my_greet (greeted_names, counter) values ($1, $2)', [name, 1])
     }
-    else {
-      greeted[name]++
-    }
-
-    if (language === 'english') {
-      return 'Hello, ' + name
-    }
-    if (language === 'isixhosa') {
-      return 'Molo, ' + name
-    }
-
-    if (language === 'isiZulu') {
-      return 'Sawubona, ' + name
+    else if (alphabets.test(names) == true && !show === null) {
+      await db.none('UPDATE my_greet SET counter = counter + 1 WHERE greeted_names = $1', [name])
     }
   }
   
+  async function clearNames() {
+    await db.none('delete from my_greet')
 
-  function errorMessage(name,language) {
-     
-    if (!language && !name) {
-        
-      return "Please enter your name and language"
-    }
-
-    else if (!name) {
-      return "Please enter your name"
-
-    }
-
-    else if (!language) {
-      return "Please select a language"
-    }
-     
   }
-
-  function clearNames() {
-    greeted = {}
-  }
-
-  function countNames() {
     
-    return Object.keys(greeted).length
+  async function countNames() {
+    //  if (alphabets.test(names) == false) {
 
+      let counted = await db.any('select * from my_greet');
+      return counted.length
+
+    // }
+    // return;
   }
-  function listofNames() {
+  async function listofNames() {
+    let greeted = await db.manyOrNone('select greeted_names from my_greet');
     return greeted
   }
 
-  function resetButton() {
+  async function resetButton() {
     return "Names succesfully cleared!"
 
   }
+
+  async function userCounter(name) {
+    let counter = await db.oneOrNone('select greeted_names, counter from my_greet where greeted_names=$1', [name])
+    return counter
+  }
+
 
   return {
     resetButton,
     listofNames,
     clearNames,
-    errorMessage,
-    getName,
-    setLanguage,
-    getLanguage,
-    setName,
-    getName,
+    greet2,
     countNames,
-
+    userCounter
 
   }
+
 }

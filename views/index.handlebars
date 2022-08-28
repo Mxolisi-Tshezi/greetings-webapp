@@ -5,24 +5,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greetings Exercise</title>
+    <title>Greetings WebApp</title>
     <link rel="stylesheet" href="/css/greet-style.css">
 </head>
 
 <body>
     <div class="container">
         <div class="wrapper">
-            <h1>Greetings Exerise</h1>
-            <p class="error-message">{{error}}</p>
+            <h1>Greetings WebApp</h1>
+            <p class="error-message" id="msg" >{{error}}</p>
             <div class="message">
-                <span class="name"> <h2>Enter name below</h2></span>
+                <span class="name">Enter name below</span>
 
                 <form action="/greet" method="POST">
                     <input type="text" name="name" class="inputName" placeholder="Name">
                     <span class="counter">{{counter}}</span>
             </div>
             <h2>Select Language</h2>
-
             <div class="language-container">
                 <div class=language>
                     <h2>English</h2>
@@ -48,16 +47,15 @@
                 {{/if}}
             </div>
             <div>
-                <button type="submit" class="button">Greet Me</button>
+                <button type="submit" class="button">Greet</button>
                 <br>
                 <br>
-                <a href="/clear"> <div class="clear">Reset Counter</div>
+                <a href="/clear">
+                    <div class="clear">Reset Counter</div>
                 </a>
             </div>
             <div class="topnav">
-                {{!-- <a class="active" href="/">Home</a> --}}
-                {{!-- <a href="/greeted">View Greeted Names</a> --}}
-                {{!-- <a href="/counter">Times</a> --}}
+            
             </div>
             <div style="padding-left:16px">
             </div>

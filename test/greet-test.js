@@ -1,60 +1,62 @@
 const assert = require('assert');
-
 const Greet = require('../greetings');
+const pgPromise = require('pg-promise');
+const greetings = require('../greetings');
 
-describe("The Greeting massages", function () {
+const pgp = pgPromise({})
 
-    it("should greet the name in English if name is entered and the selected language is english", function () {
+const local_database_url = 'postgres://mxo:mxo123@localhost:5432/my_greet';
+const connectionString = local_database_url;
 
-        const greetedName = Greet()
-        assert.equal("Hello, Mxo", greetedName.getLanguage("Mxo", "english"))
 
+const db = pgp(connectionString);
+
+ const greeted = greetings(db)
+
+describe("DataBase test cases", async function () {
+
+    beforeEach(async function(){
+        await db.none('delete from my_greet where id >=1')
     });
-    it("should greet the name in isiXhosa if the name is entered and the language is isixhosa", function () {
-
-        const greetedName = Greet()
-        assert.equal("Molo, Mxo", greetedName.getLanguage("Mxo", "isixhosa"))
-
+     
+    
+    it("Delete from database when clear names pressed", async function () {
+        
+        await greeted.greet2("Mxolisi")
+        await greeted.clearNames()
+        assert.deepEqual( [] , await greeted.listofNames())
+        
     });
-    it("should greet the name in isiXhosa if the language is selected ", function () {
+     
+    it("Should keep count on how times name greeted", async function () {
 
-        const greetedName = Greet()
-        assert.equal("Sawubona, Mxo", greetedName.getLanguage("Mxo", "isiZulu"))
+        await greeted.greet2("Mxolisi");
+        var personcounter = await greeted.userCounter("Mxolisi") ;
+        assert.equal(1, personcounter.counter)
+    });
+    
 
+    it("Return how many names have been greeted", async function () {
+    
+        await greeted.greet2("Jack");
+        await greeted.greet2("Mark");
+        await greeted.greet2("Bill");
+
+        assert.deepEqual( 3
+          , await greeted.countNames())
     });
 
 
-});
-describe("Please Select language massages",function(){
-
-    it("should warn user if the name is passed and the lanuge is not passed",function(){
-
-        const greetedName = Greet()
-        assert.equal("Please select a language",greetedName.errorMessage("Mxo" ,"") )
-
+    it("SHow name in database", async function () {
+        
+        await greeted.greet2("Jack");
+        assert.deepEqual([ { greeted_names: 'Jack' }]
+        , await greeted.listofNames())
+        
     });
-   
-});
 
-describe("The invelid massages",function(){
 
-    it("should warn user if the is no name given",function(){
-
-        const greetedName = Greet()
-        assert.equal("Please enter your name",greetedName.errorMessage("","english") )
-
+    after(async function () {
+        await db.manyOrNone('Truncate my_greet');
     });
-   
-});
-describe("The invelid massages",function(){
-
-    it("Should warn user if the is no name passed and no languge selected",function(){
-
-        const greetedName = Greet()
-        assert.equal("Please select a language",greetedName.errorMessage(" ","") )
-
-    });
-   
-});
-
-
+})

@@ -1,10 +1,31 @@
-const express = require('express');
-const flash = require('express-flash');
 const session = require('express-session');
 const exphbs = require("express-handlebars");
 const bodyParser = require('body-parser');
-const greetings = require('./greetings.js')([]);
+const express = require("express");
+const greet = require ('./routes');
+const Greeting = require ('./greet-functions');
+const greet1 = require ('./greetings');
 
+//database
+const pgp = require('pg-promise')({});
+
+const local_database_url = 'postgres://mxo:mxo123@localhost:5432/my_greet';
+const connectionString = process.env.DATABASE_URL || local_database_url;
+
+const config ={
+  connectionString 
+}
+
+if(process.env.NODE_ENV == "production"){
+  config.ssl = {
+      rejectUnauthorized: false
+  }
+}
+const db = pgp(config);
+
+const greeter = greet1(db);
+const greetRoot = Greeting();
+const Router = greet(greeter,greetRoot);
 
 const app = express();
 
@@ -23,71 +44,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get("/", function (req, res) {
-  res.render("index", {
-
-  });
-});
-
-
-app.post("/greet", function (req, res) {
-  let name = req.body.name
-  let language = req.body.language
-
-  if (!name || !language) {
-    let error = greetings.errorMessage(name, language)
-
-    res.render("index", {
-      error
-    })
-
-  } else {
-
-    let GreetAll = greetings.getLanguage(name, language)
-    let counter = greetings.countNames()
-
-    res.render("index", {
-      GreetAll, counter
-    })
-    
-  }
-});
-
-
-app.get("/clear", function (req, res) {
-  let GreetAll = greetings.resetButton()
-  greetings.clearNames()
-  res.render('index',{
-    GreetAll
-  });
-});
-
-
-
-app.get('/greeted', function (req, res) {
-
-  res.render('names', {
-    keynames: greetings.listofNames()
-  })
-});
-
-
-app.get("/counter/:name", function (req, res) {
-  let words = req.params.name
-  let person = greetings.listofNames()
-  var Text = ""
-  for (const name in person) {
-    if (name == words) {
-      let greetedTimes = person[name]
-      Text = `Hi , ${words} You have been greeted ${greetedTimes} time(s)`
-    }
-  }
-  console.log(Text)
-  res.render('counter', {
-    Text
-  });
-
-});
+app.get("/", Router.home);
+app.post("/greet",Router.greets);
+app.get("/clear",Router.clear)
+app.get('/greeted',Router.greeted);
+app.get("/counter/:name",Router.counter); 
 
 const PORT = process.env.PORT || 3008;
 
