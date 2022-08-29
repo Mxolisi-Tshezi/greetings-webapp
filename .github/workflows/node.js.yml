@@ -33,7 +33,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: create postgresql tables
-      run: PGPASSWORD=mxolisi123 psql -h localhost -U mxolisi -d greeted_users -a -f ./databaseTable.sql
+      run: PGPASSWORD=mxolisi123 psql -h localhost -U mxolisi -d greeted_users -a -f .\i databaseTable.sql
     - name: run tests with postgresql
       run:
         npm test
