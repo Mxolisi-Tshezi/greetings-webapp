@@ -1,4 +1,4 @@
-const greeter = require("./greet-functions");
+const greeter = require("../greetFact");
 module.exports = function routes(greetings,greeter) {
 
   async function home(req, res) {
@@ -38,7 +38,7 @@ module.exports = function routes(greetings,greeter) {
   async function counter(req, res) {
     let words = req.params.name
     let person = await greetings.userCounter(words)
-    Text = `${words} has been greeted ${person.counter} time(s)`
+    Text = `The name ${words} has been greeted ${person.counter} time(s)`
     res.render('counter', {
       Text
     });

@@ -1,3 +1,3 @@
-create database my_greet;
-create role mxo login password 'mxo123';
-grant all privileges on database my_greet to mxo;
+create database greeted_users;
+create role mxolisi login password 'mxolisi123';
+grant all privileges on database greeted_users to mxolisi;

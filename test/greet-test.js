@@ -5,7 +5,7 @@ const greetings = require('../greetings');
 
 const pgp = pgPromise({})
 
-const local_database_url = 'postgres://mxo:mxo123@localhost:5432/my_greet';
+const local_database_url = 'postgres://mxolisi:mxolisi123@localhost:5432/greeted_users';
 const connectionString = local_database_url;
 
 
@@ -16,7 +16,7 @@ const db = pgp(connectionString);
 describe("DataBase test cases", async function () {
 
     beforeEach(async function(){
-        await db.none('delete from my_greet where id >=1')
+        await db.none('delete from greeted_users where id >=1')
     });
      
     
@@ -57,6 +57,6 @@ describe("DataBase test cases", async function () {
 
 
     after(async function () {
-        await db.manyOrNone('Truncate my_greet');
+        await db.manyOrNone('Truncate greeted_users');
     });
 })

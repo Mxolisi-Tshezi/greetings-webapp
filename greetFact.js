@@ -1,23 +1,19 @@
 module.exports = function Greeting() {
     let name = ''
     let language = ''
-
     var alphabets = /^[a-z A-Z]+$/;
-
     function setLanguage(lang) {
         language = lang
     }
     function setName(username) {
         name = username
     }
-
     function getName() {
         return name
     }
     function getLanguage() {
         return language
     }
-
     function message(name,language) {
 
         if (alphabets.test(name) == true) {
@@ -33,7 +29,7 @@ module.exports = function Greeting() {
                 return 'Sawubona, ' + name
             }
         } else {
-            // return 'PLEASE DO NOT USE NUMBERS'
+            // return 'Invalid Name format entered'
         }
     }
 

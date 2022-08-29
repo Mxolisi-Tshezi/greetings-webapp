@@ -1,8 +1,8 @@
 const assert = require('assert');
-const Greeting = require('../greet-functions');
+const Greeting = require('../greetFact');
 
 
-describe("The Greeting massages", function () {
+describe("The Greeting test cases", function () {
 
     it("should greet the name in English if name is entered and the selected language is english", function () {
         let greetmessage = Greeting();
