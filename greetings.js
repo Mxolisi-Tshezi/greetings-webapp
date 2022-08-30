@@ -6,14 +6,15 @@ module.exports = function Greet(db) {
 
     let name = names.charAt(0).toUpperCase() + names.slice(1).toLowerCase();
 
-    let show = await db.oneOrNone('SELECT greeted_names from greeted_users WHERE greeted_names = $1', [name])
+    let show = await db.one('SELECT count(*) from greeted_users WHERE greeted_names = $1', [name])
+  if (show.count ==0){
+    await db.none("INSERT into greeted_users(greeted_names,counter) values($1,1)", [name])
+}
+else {
+  await db.none("UPDATE greeted_users set counter = counter + 1 where greeted_names=$1", [name])
+}
 
-    if (show === null && alphabets.test(names) == true) {
-      await db.none('INSERT into greeted_users (greeted_names, counter) values ($1, $2)', [name, 1])
-    }
-    else if (alphabets.test(names) == true && !show === null) {
-      await db.none('UPDATE greeted_users SET counter = counter + 1 WHERE greeted_names = $1', [name])
-    }
+
   }
   
   async function clearNames() {
